@@ -42,13 +42,29 @@ python gen_scenario.py --base-path /processed_data --output-dir /scenarios
 
 ##### Run the models
 
-Run one scenario with one model and show test results (it's convenient for testing a model):
+Run one scenario (one subject) with one model and show test results (it's convenient for testing a model):
 ```
 python deep_run_and_test.py --scenario /scenarios/rsvp48/VPfat.json --model 'mlp'
 ```
 
-Run one scenario with one model (no testing) :
+Run one scenario (one subject) with one model (no testing) :
 ```
 python deep_run.py --scenario /scenarios/rsvp48/VPfat.json --model 'mlp'
+```
+
+Run one scenario on the local cluster. Start by editing launch.py then :
+```
+#check with
+python launch.py --no-cluster
+#execute with
+python launch.py --no-cluster | sh
+```
+
+Run one scenario on the local cluster. Start by editing launch.py then :
+```
+#check with
+python launch.py
+#execute with
+python launch.py --execute
 ```
 
