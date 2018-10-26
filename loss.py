@@ -3,7 +3,6 @@ import os
 import argparse
 import sys
 import re
-sys.path.append('/dycog/Jeremie/Loic/v2')
 
 import logging
 logging.basicConfig(level=logging.DEBUG)
@@ -13,11 +12,13 @@ import numpy as np
 import pandas as pd
 import torch
 import glob
+import argparse
 from functools import reduce
 from natsort import natsorted
 
 from deep_models_def import get_model_config_by_name_and_scenario as get_model_config_deep
 from riemann_models_def import get_model_config_by_name_and_scenario as get_model_config_riemann
+
 from deep_models_def import deep_models_2d
 from deep_models_def import deep_models_3d
 deep_models_def = deep_models_2d + deep_models_3d
@@ -30,11 +31,12 @@ from utils.testers import P300DatasetTesterSpelling
 import skorch
 from skorch import NeuralNet
 
-from utils.gradients import SmoothGrad, VanillaGrad
 
 parser = argparse.ArgumentParser()
 parser.add_argument("--output-dir", help='output dir', type=str, required=True)
 args = parser.parse_args()
+
+# afterany
 
 output_dir = args.output_dir
 print('output_dir: {}'.format(output_dir))
@@ -42,6 +44,7 @@ PARAMS_FILE = 'params'
 HISTORY_FILE = 'history.json'
 SCENARIO_FILE = 'scenario.json'
 exclude_dirs_regex = ['log', '(.*).pkl']
+
 
 def clean_expe_out(expe_out, root_dir):
     d = {}
@@ -91,6 +94,8 @@ def clean_expe_out(expe_out, root_dir):
         d[expe] = d_sub
     return d
 
+
+
 def get_directory_structure(rootdir):
     """
     Creates a nested dictionary that represents the folder structure of rootdir
@@ -107,59 +112,9 @@ def get_directory_structure(rootdir):
 
 dir_struct = get_directory_structure(output_dir)
 expe_out = dir_struct[list(dir_struct.keys())[0]]
-print(expe_out)
 expe_out = clean_expe_out(expe_out, output_dir)
-
+#
 print(json.dumps(expe_out, indent=2))
-
-import multiprocessing
-
-def spelling_test(params):
-    print('spelling test')
-    expe, subject, model_name, net, p300_dataset, log_proba = params
-    model = net.module_
-    vanilla_grad = VanillaGrad(pretrained_model=model, cuda=False)
-    all = []
-    data = p300_dataset.X
-    target = p300_dataset.select(p300_dataset.y == 1).shuffle(random_state=2).X
-    non_target = p300_dataset.select(p300_dataset.y == 0).shuffle(random_state=2).X
-    non_target = non_target[:len(target)]
-    for id, item in enumerate(non_target):
-        sample = np.expand_dims(item, axis=0)
-        smooth_saliency = vanilla_grad(sample, index=0)
-        all.append(np.expand_dims(smooth_saliency, axis=0))
-    smooth_grad_non_target = np.concatenate(all)
-    vanilla_grad = VanillaGrad(pretrained_model=model, cuda=False)
-    all = []
-    data = p300_dataset.X
-    for id, item in enumerate(target):
-        sample = np.expand_dims(item, axis=0)
-        smooth_saliency = vanilla_grad(sample, index=1)
-        all.append(np.expand_dims(smooth_saliency, axis=0))
-    smooth_grad_target = np.concatenate(all)
-    print('finish')
-    # smooth_grad = SmoothGrad(pretrained_model=model, cuda=False, magnitude=True, n_samples=15)
-    # all = []
-    # data = p300_dataset.X
-    # for item in data:
-    #     sample = np.expand_dims(item, axis=0)
-    #     smooth_saliency = smooth_grad(sample, index=1)
-    #     all.append(np.expand_dims(smooth_saliency, axis=0))
-    # smooth_grad_target = np.concatenate(all)
-    #
-    rec = {
-        'expe': expe,
-        'subject': subject,
-        'model': model_name,
-        'smooth_grad_target': smooth_grad_target,
-        'smooth_grad_non_target': smooth_grad_non_target
-
-    }
-    return rec
-
-
-
-print('testing......')
 
 records = []
 errors = []
@@ -168,57 +123,35 @@ for expe, subjects in expe_out.items():
     pool_map_params = []
     for subject, subjects_data in subjects.items():
         print(subject)
-        scenario_file = subjects_data['scenario']
-        print(scenario_file)
-        with open(scenario_file, encoding='utf-8') as f:
-            scenario = json.loads(f.read())
-        test_info = scenario['test'][0]
-        p300_dataset_dir = test_info['p300_dataset_dir']
-        p300_dataset_dir = p300_dataset_dir.replace('/mnt/data/loic/data', '/data')
-        p300_dataset_key = test_info['p300_dataset_key']
-        p300_dataset_name = test_info['p300_dataset_name']
-        with open(os.path.join(p300_dataset_dir, 'data_dict.json'), encoding='utf-8') as f:
-            data_dict = json.loads(f.read())
-        saver = ObjectSaver(p300_dataset_dir)
-        p300_dataset = saver.load(data_dict[p300_dataset_name][p300_dataset_key])
-        # print(p300_dataset)
-        #deep models
         for model_name, data in subjects_data['models'].items():
-            print(model_name)
-            # if model_name not in ['cnn1d_t2']:
-            #     continue
-            checkpoint = data.get('checkpoints', [None])[-1]
             history_file = data.get('history')
-            if not history_file or not checkpoint:
+            if not history_file:
                 errors.append({
                     'expe': expe,
                     'subject': subject,
                     'model': model_name,
                 })
                 continue
-            print(checkpoint)
-            # print(history_file)
-            model = get_model_config_deep(model_name, scenario)
-            # print(model)
-            skorch_config = {
-                'module': model['class_name'],
-                'criterion': torch.nn.NLLLoss
-            }
-            skorch_config = {**skorch_config, **model['params']}
-            net = NeuralNet(**skorch_config)
-            net.initialize()
-            net.load_params(checkpoint)
-            net.load_history(history_file)
-            pool_map_params.append((expe, subject, model_name, net, p300_dataset, True))
+            data = json.load(open(history_file, 'r'))
+            best = [item for item in data if item['valid_loss_best'] == True][-1]
+            print('epoch: {}'.format(best['epoch']))
+            print('train_loss: {}'.format(best['train_loss']))
+            print('valid_loss: {}'.format(best['valid_loss']))
+            print('total_epoch: {}'.format(data[-1]['epoch']))
+            records.append({
+                'subject': subject,
+                'epoch': best['epoch'],
+                'train_loss': best['train_loss'],
+                'valid_loss': best['valid_loss'],
+                'total_epoch': data[-1]['epoch'],
+                'expe': expe,
+                'subject': subject,
+                'model': model_name,
+                })
 
-        #riemann models
-        for model_name, data in subjects_data['riemann_models'].items():
-            checkpoint = data.get('checkpoint')
-            net = pickle.load(open(checkpoint, "rb"))
-            pool_map_params.append((expe, subject, model_name, net, p300_dataset, False))
-    pool = multiprocessing.Pool(processes=10)
-    results = pool.map(spelling_test, pool_map_params)
-    for res in results:
-        records.append(res)
+df = pd.DataFrame(records)
+df.to_pickle(os.path.join(output_dir, 'valid_loss.pkl'))
 
-pickle.dump(records, open(os.path.join(output_dir, 'viz.pkl'), 'wb'))
+
+df_err = pd.DataFrame(errors)
+df_err.to_pickle(os.path.join(output_dir, 'valid_loss_err.pkl'))

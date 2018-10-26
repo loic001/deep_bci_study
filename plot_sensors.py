@@ -3,7 +3,6 @@ import os
 import sys
 import logging
 logging.basicConfig(level=logging.DEBUG)
-sys.path.append('/dycog/Jeremie/Loic/v2')
 
 import numpy as np
 import torch
@@ -34,6 +33,6 @@ def get_group_index(raw, exclude_channels):
             included_index.append(index)
     return [[], included_index, exluded_index]
 
-rsvp_raw_array.plot_sensors(show_names=True, ch_type='eeg', ch_groups=get_group_index(rsvp_raw_array, exclude_channels), title='RSVP sensors')
-meeg_raw_array.plot_sensors(show_names=True, ch_groups=get_group_index(meeg_raw_array, exclude_channels), title='P300 sensors', bgcolor='black')
+rsvp_raw_array.plot_sensors(show_names=True, ch_groups=get_group_index(rsvp_raw_array, exclude_channels), title='RSVP sensors')
+meeg_raw_array.plot_sensors(show_names=True, ch_groups=get_group_index(meeg_raw_array, exclude_channels), title='P300 sensors')
 plt.show()

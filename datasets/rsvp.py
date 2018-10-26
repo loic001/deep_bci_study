@@ -8,7 +8,7 @@ from scipy.io import loadmat
 
 from datasets.base import EEGDataset
 
-DATA_DIR = '/deeplearning/data/RSVP/'
+DATA_DIR = '/media/lolo/Maxtor/deep_bci_study/data/RSVP/'
 
 class RSVP_COLOR_116(EEGDataset):
     # EEGDataset implementation

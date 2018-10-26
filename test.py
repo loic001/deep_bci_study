@@ -3,7 +3,6 @@ import os
 import argparse
 import sys
 import re
-sys.path.append('/dycog/Jeremie/Loic/v2')
 
 import logging
 logging.basicConfig(level=logging.DEBUG)
@@ -31,7 +30,7 @@ from utils.testers import P300DatasetTesterSpelling
 import skorch
 from skorch import NeuralNet
 
-output_dir = '/data/final_results/cross-subject/meeg_cnn3d_s3_t2_gru_1700_continue'
+output_dir = '/home/lolo/projects/deep_bci_study/outputs'
 PARAMS_FILE = 'params'
 HISTORY_FILE = 'history.json'
 SCENARIO_FILE = 'scenario.json'

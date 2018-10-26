@@ -1,0 +1,24 @@
+{
+    "params": {
+        "n_chans": 48
+    },
+    "name": "rsvp48/VPfat",
+    "train": [
+        {
+            "memmap_dir": "/media/lolo/Maxtor/deep_bci_study/processed_data/rsvp48/memmap",
+            "memmap_name": "RSVP_COLOR_116_VPfat_calib",
+            "p300_dataset_dir": "/media/lolo/Maxtor/deep_bci_study/processed_data/rsvp48",
+            "p300_dataset_name": "RSVP_COLOR_116_VPfat",
+            "p300_dataset_key": "calib_dataset"
+        }
+    ],
+    "test": [
+        {
+            "memmap_dir": "/media/lolo/Maxtor/deep_bci_study/processed_data/rsvp48/memmap",
+            "memmap_name": "RSVP_COLOR_116_VPfat",
+            "p300_dataset_dir": "/media/lolo/Maxtor/deep_bci_study/processed_data/rsvp48",
+            "p300_dataset_name": "RSVP_COLOR_116_VPfat",
+            "p300_dataset_key": "dataset"
+        }
+    ]
+}

@@ -6,7 +6,6 @@ import glob
 import pathlib
 import hashlib
 import pickle
-import hickle
 import joblib
 
 class ObjectSaver(object):
@@ -32,35 +31,6 @@ class ObjectSaver(object):
     def remove_files(self):
         for filename in glob.glob('{}.*'.format(self.db_name)):
             os.remove(filename)
-
-
-class ObjectSaverHickle(object):
-    def __init__(self, db_dir):
-        self.db_dir = db_dir
-        self.logger = logging.getLogger(self.__class__.__name__)
-        if not os.path.exists(self.db_dir):
-            os.makedirs(self.db_dir)
-    def save(self, obj, _id=None):
-        _id = _id if _id else uuid.uuid4().hex
-        _name = os.path.join(self.db_dir, '{}.hkl'.format(_id))
-        hickle.dump(obj, _name, mode='w', compression='gzip')
-        return _id
-
-    def load(self, _id, remove=False):
-        obj = None
-        _name = os.path.join(self.db_dir, '{}.hkl'.format(_id))
-        try:
-            obj = hickle.load(_name)
-            if remove:
-                os.remove(_name)
-        except:
-            self.logger.warn('{} does not exist in db {}'.format(_id, self.db_dir))
-        return obj
-
-    def remove_files(self):
-        for filename in glob.glob(os.path.join(self.db_dir, '*.hkl')):
-            os.remove(filename)
-
 
 class ObjectSaverJoblib(object):
     def __init__(self, db_dir):

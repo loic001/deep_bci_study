@@ -17,7 +17,7 @@ def get_model_config_by_name_and_scenario(name, scenario):
             'class_name': MLP,
             'params': {
                 'module__n_chans': scenario.get('params', {}).get('n_chans', 48),
-                'lr': 0.00001,
+                'lr': 0.0001,
                 'max_epochs': 500
             }
         },

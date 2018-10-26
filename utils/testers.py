@@ -1,8 +1,5 @@
 import os
-
 import sys
-sys.path.append('/dycog/Jeremie/Loic/deepeeg')
-
 import logging
 import mne
 import shelve

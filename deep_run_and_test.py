@@ -2,7 +2,6 @@ import json
 import os
 import argparse
 import sys
-sys.path.append('/dycog/Jeremie/Loic/v2')
 
 from shutil import copyfile
 from natsort import natsorted
@@ -22,21 +21,6 @@ from torch.utils.data import Dataset, DataLoader, TensorDataset
 import skorch
 from skorch import NeuralNet
 from skorch.dataset import CVSplit
-
-from models.cnn2d import CNN2D
-from models.cnn2d_topo import CNN2D_TOPO
-from models.cnn2d_tdb_topo import CNN2D_TDB_TOPO
-from models.mlp_tdb import MLP_TDB
-from models.mlp_tdb_topo import MLP_TDB_TOPO
-
-from torch_ext.datasets import MemmapDataset
-
-from models.cnn2d import CNN2D
-from models.cnn2d_topo import CNN2D_TOPO
-from models.cnn2d_tdb_topo import CNN2D_TDB_TOPO
-from models.mlp_tdb import MLP_TDB
-from models.mlp_tdb_topo import MLP_TDB_TOPO
-
 from torch_ext.datasets import MemmapDataset
 
 from deep_models_def import get_model_config_by_name_and_scenario

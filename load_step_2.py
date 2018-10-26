@@ -6,7 +6,6 @@ import logging
 import gc
 logging.basicConfig(level=logging.DEBUG)
 
-sys.path.append('/dycog/Jeremie/Loic/v2')
 from datasets.base import P300Dataset
 from utils.db import ObjectSaverJoblib as ObjectSaver
 

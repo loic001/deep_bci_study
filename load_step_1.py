@@ -44,7 +44,7 @@ datasets_def = [
         },
         #epochs params
         # 'exclude_channels': ['P8', 'O2'],
-        'transformers': [InterpolatorTransformer()],
+        'transformers': [],
         #others params
         'cache': True
     }

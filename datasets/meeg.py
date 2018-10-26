@@ -23,7 +23,7 @@ from utils.mne import concat_raw_arrays_list
 # SamplingFrequency    : Sampling frequency
 # Subject            : Subject Id
 
-DATA_DIR = '/deeplearning/data/P300_Speller_MEEG'
+DATA_DIR = '/media/lolo/Maxtor/deep_bci_study/data/P300_Speller_MEEG'
 
 class P300_SPELLER_MEEG(EEGDataset):
     # EEGDataset implementation

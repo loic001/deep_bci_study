@@ -2,7 +2,6 @@ import json
 import os
 import argparse
 import sys
-sys.path.append('/dycog/Jeremie/Loic/v2')
 
 import logging
 logging.basicConfig(level=logging.DEBUG)
