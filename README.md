@@ -9,6 +9,7 @@
 $ git clone <this repo>
 $ cd deep_bci_study
 $ conda env create
+$ pip install -r requirements.txt
 ```
 
 ### Run
