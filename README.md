@@ -52,19 +52,22 @@ Run one scenario (one subject) with one model (no testing) :
 python deep_run.py --scenario /scenarios/rsvp48/VPfat.json --model 'mlp'
 ```
 
-Run one scenario on the local cluster. Start by editing launch.py then :
-```
-#check with
-python launch.py --no-cluster
-#execute with
-python launch.py --no-cluster | sh
-```
 
-Run one scenario on the local cluster. Start by editing launch.py then :
+Run one scenario for all subjects (run sequentially). Start by editing launch.py then :
 ```
 #check with
 python launch.py
 #execute with
 python launch.py --execute
+```
+
+##### Run the models on the local cluster
+
+Run one scenario for all subjects on the local cluster. Start by editing launch.py then :
+```
+#check with
+python launch.py --no-cluster
+#execute with
+python launch.py --no-cluster | sh
 ```
 
