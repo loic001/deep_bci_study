@@ -63,6 +63,16 @@ python launch.py --execute
 
 ##### Run the models on the local cluster
 
+
+Connect to the local cluster:
+
+
+```
+ssh 10.69.111.81
+```
+
+Clone this gitlab repo and install all deps on the cluster. Data must be put in /mnt/data/<your_name>/ directory.
+
 Run one scenario for all subjects on the local cluster. Start by editing launch.py then :
 ```
 #check with
