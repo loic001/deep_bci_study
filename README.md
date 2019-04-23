@@ -1,5 +1,7 @@
 # Deep BCI study
 
+To get the data, please send an email to loic.delobel@gmail.com
+
 ### Installation
 
 - Install conda : https://conda.io/docs/user-guide/install/index.html
