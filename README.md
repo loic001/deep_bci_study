@@ -83,3 +83,11 @@ python launch.py --no-cluster
 python launch.py --no-cluster | sh
 ```
 
+##### Models description
+
+![alt text](assets/mlp.png)
+![alt text](assets/cnn1d_t2.png)
+![alt text](assets/cnn1d_t2_gru.png)
+![alt text](assets/cnn2d_s3.png)
+![alt text](assets/cnn3d_s3_t2.png)
+![alt text](assets/cnn3d_s3_t2_gru.png)
