@@ -84,6 +84,7 @@ python launch.py --no-cluster | sh
 ```
 
 ##### Models description
+![alt text](assets/models_grid.PNG)
 
 ![alt text](assets/mlp.png)
 ![alt text](assets/cnn1d_t2.png)
